@@ -422,7 +422,8 @@ class MainActivity : AppCompatActivity() {
             textSize = 40.0f
         }
 
-        for (i in 0 until numberOfDetections.size) {
+        // Iterate over all detections
+        for (i in 0 until numberOfDetections[0].toInt()) { // Make sure to iterate based on the number of detections
             val score = scores[i]
             if (score > DETECTION_THRESHOLD) {
                 // The locations array contains the bounding box: [top, left, bottom, right]
@@ -449,6 +450,7 @@ class MainActivity : AppCompatActivity() {
             Log.d("MainActivity", "Drawable set on ImageView")
         }
     }
+
 
     fun get_permission(){
         if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
