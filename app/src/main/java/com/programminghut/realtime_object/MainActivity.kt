@@ -1,5 +1,6 @@
 package com.programminghut.realtime_object
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
@@ -20,6 +21,7 @@ import androidx.core.content.ContextCompat
 import android.content.Intent
 import android.provider.MediaStore
 import android.app.Activity
+import android.content.ContentValues
 import android.net.Uri
 import android.util.Log
 import com.programminghut.realtime_object.ml.SsdMobilenetV11Metadata1
@@ -36,7 +38,10 @@ import java.io.FileInputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import android.hardware.camera2.CameraAccessException
-
+import android.os.Environment
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import java.io.OutputStream
 
 
 class MainActivity : AppCompatActivity() {
@@ -324,6 +329,8 @@ class MainActivity : AppCompatActivity() {
         private const val IMAGE_MEAN = 128.0f
         private const val IMAGE_STD = 128.0f
         private const val DETECTION_THRESHOLD = 0.5f
+        private const val STORAGE_PERMISSION_CODE = 1001
+        private const val PERMISSION_REQUEST_CODE = 101
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -448,23 +455,80 @@ class MainActivity : AppCompatActivity() {
             imageView.visibility = View.VISIBLE
             imageView.setImageDrawable(drawable)
             Log.d("MainActivity", "Drawable set on ImageView")
+
+            findViewById<Button>(R.id.btnSaveImage).apply {
+                visibility = View.VISIBLE
+                setOnClickListener {
+                    val savedImagePath = saveImageToGallery(mutableImage)
+                    Toast.makeText(this@MainActivity, "Image saved to $savedImagePath", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
+    private fun saveImageToGallery(bitmap: Bitmap): String {
+        val filename = "detected_${System.currentTimeMillis()}.jpg"
+        var fos: OutputStream? = null
+        var fileUri: Uri? = null
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+        }
 
-    fun get_permission(){
-        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-            requestPermissions(arrayOf(android.Manifest.permission.CAMERA), 101)
+        // Use the ContentResolver to save the image
+        contentResolver.also { resolver ->
+            fileUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+            fos = fileUri?.let { resolver.openOutputStream(it) }
+        }
+
+        fos?.use {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
+        }
+
+        return fileUri.toString() // Return the file path of the saved image
+    }
+
+    private fun requestStoragePermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), STORAGE_PERMISSION_CODE)
         }
     }
+
+    fun get_permission() {
+        val permissionsToRequest = mutableListOf<String>()
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            permissionsToRequest.add(android.Manifest.permission.CAMERA)
+        }
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissionsToRequest.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+
+        if (permissionsToRequest.isNotEmpty()) {
+            requestPermissions(permissionsToRequest.toTypedArray(), PERMISSION_REQUEST_CODE)
+        }
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(grantResults[0] != PackageManager.PERMISSION_GRANTED){
-            get_permission()
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            var allPermissionsGranted = true
+            for (i in grantResults.indices) {
+                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                    allPermissionsGranted = false
+                    Toast.makeText(this, "Permission denied for: ${permissions[i]}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            if (allPermissionsGranted) {
+                // All requested permissions are granted
+                // You can proceed with opening the camera or saving images
+            }
         }
     }
+
 }
