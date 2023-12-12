@@ -341,24 +341,28 @@ class MainActivity : AppCompatActivity() {
 
     private fun processImage(imageUri: Uri) {
         val imageStream = contentResolver.openInputStream(imageUri)
-        val selectedImage = BitmapFactory.decodeStream(imageStream)
+        val originalImage = BitmapFactory.decodeStream(imageStream)
 
         // Check if the image is loaded correctly
-        if (selectedImage != null) {
-            Log.d("MainActivity", "Image loaded, size: ${selectedImage.width} x ${selectedImage.height}")
-            processAndDisplayImage(selectedImage)
+        if (originalImage != null) {
+            Log.d("MainActivity", "Image loaded, size: ${originalImage.width} x ${originalImage.height}")
+
+            // Resize the bitmap to the required input size for the model
+            val processedImage = Bitmap.createScaledBitmap(originalImage, MODEL_WIDTH, MODEL_HEIGHT, true)
+
+            // Process and display the image
+            processAndDisplayImage(originalImage, processedImage)
         } else {
             Log.e("MainActivity", "Failed to decode selected image")
         }
     }
 
 
-    private fun processAndDisplayImage(image: Bitmap) {
-        Log.d("MainActivity", "Processing image")
-        // Resize the bitmap to the required input size for the model
-        val processedImage = Bitmap.createScaledBitmap(image, MODEL_WIDTH, MODEL_HEIGHT, true)
 
-        // Convert the Bitmap to TensorImage
+    private fun processAndDisplayImage(originalImage: Bitmap, processedImage: Bitmap) {
+        Log.d("MainActivity", "Processing image")
+
+        // Convert the resized Bitmap to TensorImage
         val tensorImage = TensorImage.fromBitmap(processedImage)
 
         // Process the image using the model
@@ -370,14 +374,11 @@ class MainActivity : AppCompatActivity() {
         val scores = outputs.scoresAsTensorBuffer.floatArray
         val numberOfDetections = outputs.numberOfDetectionsAsTensorBuffer.floatArray
 
-        for (i in 0 until numberOfDetections.size) {
-            Log.d("MainActivity", "Detection $i: ${scores[i]}, Location: ${locations[4 * i]} ${locations[4 * i + 1]} ${locations[4 * i + 2]} ${locations[4 * i + 3]}")
-        }
-
-        // Draw the results on the image
+        // Draw the results on the original image
         Log.d("MainActivity", "Model processing complete")
-        drawDetectionResult(processedImage, locations, classes, scores, numberOfDetections)
+        drawDetectionResult(originalImage, locations, classes, scores, numberOfDetections)
     }
+
 
 
     private fun convertBitmapToByteBuffer(bitmap: Bitmap): ByteBuffer {
