@@ -38,10 +38,13 @@ import java.io.FileInputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import android.hardware.camera2.CameraAccessException
+import android.icu.text.SimpleDateFormat
 import android.os.Environment
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import java.io.OutputStream
+import java.util.Date
+import java.util.Locale
 
 
 class MainActivity : AppCompatActivity() {
@@ -101,6 +104,13 @@ class MainActivity : AppCompatActivity() {
         selectImageButton.setOnClickListener {
             pickImageFromGallery()
         }
+
+        val btnViewHistory: Button = findViewById(R.id.btnViewHistory)
+        btnViewHistory.setOnClickListener {
+            val intent = Intent(this, DetectedHistoryActivity::class.java)
+            startActivity(intent)
+        }
+
 
         textureView = findViewById(R.id.textureView)
         textureView.surfaceTextureListener = textureViewListener
@@ -446,6 +456,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+
         val drawable = BitmapDrawable(resources, mutableImage)
         runOnUiThread {
             // Hide the camera preview
@@ -486,8 +497,20 @@ class MainActivity : AppCompatActivity() {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
         }
 
-        return fileUri.toString() // Return the file path of the saved image
+        // Save the image details in the database (consider doing this in a background thread)
+        fileUri?.let {
+            val savedImagePath = it.toString()
+            val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+            Thread {
+                val databaseHelper = DetectedImageDatabaseHelper(this)
+                databaseHelper.addDetectedImage(savedImagePath, timestamp)
+            }.start()
+            return savedImagePath // Return the file path of the saved image
+        }
+
+        return "" // Return an empty string if saving the image failed
     }
+
 
     private fun requestStoragePermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {

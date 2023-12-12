@@ -31,6 +31,8 @@
             android:exported="false">
             <!-- No intent-filter here, so it's not directly accessible from outside the app -->
         </activity>
+        <activity android:name=".DetectedHistoryActivity" />
+
     </application>
 
 </manifest>

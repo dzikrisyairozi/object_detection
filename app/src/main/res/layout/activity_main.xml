@@ -28,6 +28,16 @@
         android:layout_alignParentEnd="true"
         android:visibility="gone" /> <!-- Initially hidden -->
 
+    <Button
+        android:id="@+id/btnViewHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View History"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="24dp"
+        />
+
 
     <LinearLayout
         android:id="@+id/bottomButtonsLayout"
