@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class DetectedHistoryActivity : AppCompatActivity() {
+class DetectedHistoryActivity : AppCompatActivity(), DetectedImagesAdapter.ImageDeleteCallback {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: DetectedImagesAdapter
@@ -19,7 +19,7 @@ class DetectedHistoryActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = DetectedImagesAdapter()
+        adapter = DetectedImagesAdapter(deleteCallback = this)
         recyclerView.adapter = adapter
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
@@ -52,5 +52,9 @@ class DetectedHistoryActivity : AppCompatActivity() {
     private fun loadDetectedImages() {
         val detectedImages = databaseHelper.getAllDetectedImages()
         adapter.updateData(detectedImages)
+    }
+
+    override fun onImageDeleted() {
+        loadDetectedImages() // Reload the images from the database
     }
 }

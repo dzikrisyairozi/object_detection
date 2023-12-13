@@ -68,5 +68,10 @@ class DetectedImageDatabaseHelper(context: Context) : SQLiteOpenHelper(context, 
         return detectedImages
     }
 
+    fun deleteDetectedImage(imagePath: String) {
+        val db = this.writableDatabase
+        db.delete(TABLE_NAME, "$COLUMN_IMAGE_PATH = ?", arrayOf(imagePath))
+        db.close()
+    }
 
 }

@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="active_dot">#FF6200EE</color>
     <color name="inactive_dot">#FF000000</color>
+    <color name="main_red">#BB0400</color>
 </resources>
