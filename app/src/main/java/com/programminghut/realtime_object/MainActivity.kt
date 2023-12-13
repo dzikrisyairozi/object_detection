@@ -3,49 +3,38 @@ package com.programminghut.realtime_object
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.AssetFileDescriptor
 import android.graphics.*
+import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraCaptureSession
 import android.hardware.camera2.CameraDevice
 import android.hardware.camera2.CameraManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
+import android.util.Log
 import android.view.Surface
 import android.view.TextureView
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import android.content.Intent
-import android.provider.MediaStore
-import android.app.Activity
-import android.content.ContentValues
-import android.net.Uri
-import android.util.Log
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.programminghut.realtime_object.ml.SsdMobilenetV11Metadata1
+import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.support.common.FileUtil
 import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.image.ops.ResizeOp
-import org.tensorflow.lite.Interpreter
+import java.io.FileInputStream
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
-import android.content.res.AssetFileDescriptor
-import android.graphics.drawable.BitmapDrawable
-import java.io.FileInputStream
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
-import android.hardware.camera2.CameraAccessException
-import android.icu.text.SimpleDateFormat
-import android.os.Environment
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import java.io.OutputStream
-import java.util.Date
-import java.util.Locale
 
 
 class MainActivity : AppCompatActivity() {
@@ -90,6 +79,8 @@ class MainActivity : AppCompatActivity() {
 
         imageView = findViewById(R.id.imageView)
         imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+
+
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNavigationView.selectedItemId = R.id.navigation_camera

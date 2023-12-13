@@ -13,9 +13,9 @@
 
         <ImageView
             android:id="@+id/imageViewLogo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_launcher_foreground"
+            android:layout_width="156dp"
+            android:layout_height="156dp"
+            android:src="@mipmap/ic_launcher_foreground"
             android:contentDescription="@string/welcome_image_desc" />
 
         <TextView

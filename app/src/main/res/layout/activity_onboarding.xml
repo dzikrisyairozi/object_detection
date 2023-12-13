@@ -21,9 +21,10 @@
 
     <Button
         android:id="@+id/getStartedButton"
+        android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/welcome_message"
+        android:text="@string/get_started"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="60dp"

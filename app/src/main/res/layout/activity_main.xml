@@ -19,6 +19,7 @@
 
     <Button
         android:id="@+id/btnStartCamera"
+        android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start Camera"
@@ -28,6 +29,7 @@
         />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:textColor="@color/main_red"
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

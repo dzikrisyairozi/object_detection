@@ -1,11 +1,12 @@
 <resources>
-    <string name="app_name">realtime_object</string>
+    <string name="app_name">PixiePulse</string>
     <string name="welcome_image_desc">Welcome</string>
-    <string name="welcome_message">Welcome to the App</string>
+    <string name="welcome_message">Welcome to PixiePulse</string>
     <string name="camera_access_image_desc">Camera Access</string>
     <string name="camera_access_explanation">Allow App to Access Camera</string>
     <string name="open_camera_image_desc">Open Camera</string>
     <string name="open_camera_explanation">Press the Button to Start the Camera</string>
     <string name="direct_phone_image_desc">Find Object!</string>
     <string name="direct_phone_explanation">Direct the Phone Camera to Near Objects</string>
+    <string name="get_started">Get Started</string>
 </resources>

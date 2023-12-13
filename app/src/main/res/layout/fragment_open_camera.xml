@@ -7,9 +7,9 @@
     android:padding="16dp">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_camera"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@drawable/baseline_photo_camera_24"
         android:contentDescription="@string/open_camera_image_desc" />
 
     <TextView
@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="@string/open_camera_explanation"
-        android:textSize="16sp"
+        android:textSize="24sp"
         android:textAlignment="center" />
 
 </LinearLayout>
