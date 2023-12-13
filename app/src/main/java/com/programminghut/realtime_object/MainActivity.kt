@@ -42,6 +42,7 @@ import android.icu.text.SimpleDateFormat
 import android.os.Environment
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.io.OutputStream
 import java.util.Date
 import java.util.Locale
@@ -90,6 +91,29 @@ class MainActivity : AppCompatActivity() {
         imageView = findViewById(R.id.imageView)
         imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
 
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationView.selectedItemId = R.id.navigation_camera
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_history -> {
+                    val intent = Intent(this, DetectedHistoryActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.navigation_camera -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.navigation_image_picker -> {
+                    val intent = Intent(this, ImagePickerActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                else -> false
+            }
+        }
+
         // Initialize and set click listener for startCameraButton
         startCameraButton = findViewById(R.id.btnStartCamera)
         startCameraButton.setOnClickListener {
@@ -101,18 +125,18 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        val selectImageButton: Button = findViewById(R.id.btnSelectImage)
-        selectImageButton.setOnClickListener {
-            val intent = Intent(this, ImagePickerActivity::class.java)
-            startActivity(intent) // Use startActivityForResult if you expect a result back
-        }
-
-
-        val btnViewHistory: Button = findViewById(R.id.btnViewHistory)
-        btnViewHistory.setOnClickListener {
-            val intent = Intent(this, DetectedHistoryActivity::class.java)
-            startActivity(intent)
-        }
+//        val selectImageButton: Button = findViewById(R.id.btnSelectImage)
+//        selectImageButton.setOnClickListener {
+//            val intent = Intent(this, ImagePickerActivity::class.java)
+//            startActivity(intent) // Use startActivityForResult if you expect a result back
+//        }
+//
+//
+//        val btnViewHistory: Button = findViewById(R.id.btnViewHistory)
+//        btnViewHistory.setOnClickListener {
+//            val intent = Intent(this, DetectedHistoryActivity::class.java)
+//            startActivity(intent)
+//        }
 
 
         textureView = findViewById(R.id.textureView)

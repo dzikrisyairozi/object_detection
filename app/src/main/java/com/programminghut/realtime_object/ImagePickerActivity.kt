@@ -20,6 +20,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.programminghut.realtime_object.ml.SsdMobilenetV11Metadata1
 import org.tensorflow.lite.support.common.FileUtil
 import org.tensorflow.lite.support.image.TensorImage
@@ -42,6 +43,29 @@ class ImagePickerActivity : AppCompatActivity() {
 
         imageView = findViewById(R.id.selectedImageView)
         labels = FileUtil.loadLabels(this, "labels.txt")
+
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationView.selectedItemId = R.id.navigation_image_picker
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_history -> {
+                    val intent = Intent(this, DetectedHistoryActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.navigation_camera -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.navigation_image_picker -> {
+                    val intent = Intent(this, ImagePickerActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                else -> false
+            }
+        }
 
         val btnOpenGallery: Button = findViewById(R.id.btnOpenGallery)
         btnOpenGallery.setOnClickListener {
