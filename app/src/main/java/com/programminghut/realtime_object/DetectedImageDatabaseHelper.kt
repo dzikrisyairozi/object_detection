@@ -45,7 +45,10 @@ class DetectedImageDatabaseHelper(context: Context) : SQLiteOpenHelper(context, 
     fun getAllDetectedImages(): List<DetectedImage> {
         val detectedImages = mutableListOf<DetectedImage>()
         val db = this.readableDatabase
-        val cursor: Cursor = db.rawQuery("SELECT * FROM $TABLE_NAME", null)
+
+        // Change the query to order by timestamp or ID in descending order
+        val query = "SELECT * FROM $TABLE_NAME ORDER BY $COLUMN_TIMESTAMP DESC" // or use COLUMN_ID if it suits better
+        val cursor: Cursor = db.rawQuery(query, null)
 
         if (cursor.moveToFirst()) {
             val indexPath = cursor.getColumnIndex(COLUMN_IMAGE_PATH)
@@ -64,5 +67,6 @@ class DetectedImageDatabaseHelper(context: Context) : SQLiteOpenHelper(context, 
         db.close()
         return detectedImages
     }
+
 
 }
