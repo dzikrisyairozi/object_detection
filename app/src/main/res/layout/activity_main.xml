@@ -28,15 +28,6 @@
         android:layout_alignParentEnd="true"
         android:visibility="gone" /> <!-- Initially hidden -->
 
-    <Button
-        android:id="@+id/btnViewHistory"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="View History"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="24dp"
-        />
 
 
     <LinearLayout
@@ -48,17 +39,30 @@
         android:layout_alignParentBottom="true">
 
         <Button
+            android:id="@+id/btnViewHistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="History"
+            android:layout_alignParentStart="true"
+            />
+
+
+        <Button
             android:id="@+id/btnStartCamera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Start Camera" />
+            android:text="Start Camera"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            />
 
         <Button
             android:id="@+id/btnSelectImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select Image"
-            android:layout_marginLeft="10dp" />
+            android:text="Image Picker"
+            />
+
     </LinearLayout>
 
 </RelativeLayout>
